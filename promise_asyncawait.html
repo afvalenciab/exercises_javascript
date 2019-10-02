@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <ul>
+      <li><button id="popular">List Popular Movies</button></li>      
+    </ul>
+
+    <ul id="movies"></ul>
+
+    <script>
+      // https://api.themoviedb.org/3/movie/550?api_key=178972b4b79443d3eb72fd0cc294e34a
+      // https://api.themoviedb.org/3/discover/movie?api_key=178972b4b79443d3eb72fd0cc294e34a&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1
+      // https://api.themoviedb.org/3/discover/movie?api_key=178972b4b79443d3eb72fd0cc294e34a&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=true&page=1
+
+      const buttonSequence = document.querySelector("#popular");      
+      const apiKey = "178972b4b79443d3eb72fd0cc294e34a";
+
+      async function getPopularMovie() {
+        const url = `https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=${apiKey}`;
+
+        try {
+          const response = await fetch(url);
+          const responseJson = await response.json();
+          const data = responseJson.results;
+          
+          return data;
+
+        } catch (error) {
+          console.log(error);
+        }
+      }
+
+      async function getPopularMoviesByIds(n = 3) {
+
+        const response = await getPopularMovie();
+        const movieList = response.slice(0, n);
+        return movieList;
+      }
+
+      buttonSequence.onclick = async function() {
+        const movies = await getPopularMoviesByIds(20);
+        renderMovies(movies);
+      };
+
+      function renderMovies(movies) {
+        const listMovies = document.querySelector("#movies");
+        listMovies.innerHTML = "";
+        console.log(movies);
+
+        movies.forEach(itemMovie => {
+          const liItem = document.createElement("li");
+          liItem.innerHTML = `<img src="https://image.tmdb.org/t/p/w342${itemMovie.poster_path}" />
+          <h5>${itemMovie.title}</h5>
+          <p>Release_date: ${itemMovie.release_date}</p>
+          `;
+
+          listMovies.appendChild(liItem);
+        });
+      }
+    </script>
+  </body>
+</html>

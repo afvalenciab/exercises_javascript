@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Fetch - Abort Controller</title>
+  <style>
+    body{
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    h1{
+      margin: 0 40px;
+    }
+
+    .image{
+      width: 300px;
+      height: 400px;
+    }
+
+    figure{
+      width: 300px;
+      height: 400px;
+      border: 1px solid black;
+    }
+
+    button{
+      margin: 0 40px;
+      width: 100px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Fetch Abort Controller</h1>
+  <figure>
+    <img id="image" class="image" alt="">
+  </figure>
+  <button id="start">Start</button>
+  <button id="stop">Stop</button>
+
+  <script>
+    const start = document.querySelector('#start');
+    const stop = document.querySelector('#stop');
+    const image = document.querySelector('#image');
+    const url = "https://images.pexels.com/photos/974470/nature-stars-milky-way-galaxy-974470.jpeg?q=100";
+    let controller;
+
+    start.onclick = async function() {
+      controller = new AbortController();
+
+      try {
+        const response = await fetch(url, {signal: controller.signal });
+        const blob = await response.blob();
+        const imageURL = URL.createObjectURL(blob);
+        image.setAttribute('src', imageURL); 
+      } catch (error) {
+        console.log(error.message);
+      }      
+    };
+
+    stop.onclick = function() {
+      controller.abort();
+    };
+
+  </script>
+</body>
+</html>

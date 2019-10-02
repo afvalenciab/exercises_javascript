@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Generators</title>
+</head>
+<body>
+  
+  <script>
+    //Simple Generetor
+    function* simpleGenerator(){
+      console.log('GENERATOR START');
+      yield 1;
+      yield 2;
+      yield 3;
+      console.log('GENERATOR END');
+    }
+
+    const gen = simpleGenerator();
+    console.log(gen.next()); 
+    console.log(gen.next());
+    console.log(gen.next());
+    console.log(gen.next());
+
+    //Generator Inifinite
+    function* makerIds() {
+      let i = 1;
+      let reset;
+      while(true) {
+        reset = yield i;
+        debugger;
+        if (reset){
+           i = 1;
+        } else {
+          i +=1;
+        }
+      }
+    }
+
+    const gen2 = makerIds();
+    console.log(gen2.next());
+    </script>
+</body>
+</html>
